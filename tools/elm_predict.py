@@ -4,11 +4,11 @@ import getopt
 import numpy
 import sys
 
-TPPRED_ROOT = os.environ.get('TPPRED_ROOT')
+SCHLORO_ROOT = os.environ.get('SCHLORO_ROOT')
 
-sys.path.append(TPPRED_ROOT)
+sys.path.append(SCHLORO_ROOT)
 
-from modules.slfn import *
+from schlorolib.slfn import *
 
 def printVerbose(level, infolevel, message, nl = True):
     if level >= infolevel:
