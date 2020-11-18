@@ -31,12 +31,12 @@ ELM_MODELS = {'ctp': os.path.join(SCHLORO_ROOT, 'data', 'elm', 'SCEXP2016-ML.ctp
               'spmem': os.path.join(SCHLORO_ROOT, 'data', 'elm', 'SCEXP2016-ML.spmem.model'),
               'ttp': os.path.join(SCHLORO_ROOT, 'data', 'elm', 'SCEXP2016-ML.ttp.model')}
 
-SVM_MODELS = {0: "",
-              1: "",
-              2: "",
-              3: "",
-              4: "",
-              5: ""}
+SVM_MODELS = {0: os.path.join(SCHLORO_ROOT, 'data', 'svm', 'SCEXP2016-ML.6lab.c0.model'),
+              1: os.path.join(SCHLORO_ROOT, 'data', 'svm', 'SCEXP2016-ML.6lab.c1.model'),
+              2: os.path.join(SCHLORO_ROOT, 'data', 'svm', 'SCEXP2016-ML.6lab.c2.model'),
+              3: os.path.join(SCHLORO_ROOT, 'data', 'svm', 'SCEXP2016-ML.6lab.c3.model'),
+              4: os.path.join(SCHLORO_ROOT, 'data', 'svm', 'SCEXP2016-ML.6lab.c4.model'),
+              5: os.path.join(SCHLORO_ROOT, 'data', 'svm', 'SCEXP2016-ML.6lab.c5.model')}
 
 ELM_WINDOW = 15
 ELM_INPUT_SIZE = 21
@@ -48,15 +48,9 @@ SVMBIN = "svm-predict"
 PSIBLAST_ITERATIONS = 3
 PSIBLAST_EVALUE = 0.001
 
-locmap = {0: ('Chloroplast > Chloroplast_Inner_Membrane', 'inner'),
-          1: ('Chloroplast > Chloroplast_Outer_Membrane', 'outer'),
-          2: ('Chloroplast > Thylakoid > Chloroplast_Thylakoid_Lumen', 'lumen'),
-          3: ('Chloroplast > Chloroplast_Stroma', 'stroma'),
-          4: ('Chloroplast > Thylakoid > Chloroplast_Thylakoid_Membrane', 'membrane'),
-          5: ('Chloroplast > Plastoglobule', 'plastoglobule')}
-
-featmap = {'ctp': ('Chloroplast-targeting peptide', 'transit_peptide', 0.63),
-           'ttp': ('Thylakoid-targeting peptide', 'transit_peptide', 0.36),
-           'spmem': ('Single-pass membrane protein', 'membrane_topology', 0.43),
-           'mpmem': ('Multi-pass membrane protein', 'membrane_topology', 0.51),
-           'pmem' : ('Peropheral membrane protein', 'membrane_topology', 0.27)}
+locmap = {0: ('Chloroplast inner membrane', 'GO:0009706'),
+          1: ('Chloroplast outer membrane', 'GO:0009707'),
+          2: ('Chloroplast thylakoid lumen', 'GO:0009543'),
+          3: ('Chloroplast stroma', 'GO:0009570'),
+          4: ('Chloroplast thylakoid membrane', 'GO:0009535'),
+          5: ('Plastoglobule', 'GO:0010287')}

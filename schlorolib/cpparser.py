@@ -18,7 +18,7 @@ def BlastCheckPointProfile(checkpointFile, newFormat = True):
     try:
         checkpointFile = open(checkpointFile).readlines()
     except IOError:
-        print "Error while open/reading checkpoint file."
+        print("Error while open/reading checkpoint file.")
         raise
     profile = None
     if newFormat:
@@ -66,7 +66,7 @@ def BlastCheckPointPSSM(checkpointFile, newFormat = True, transform = True):
     try:
         checkpointFile = open(checkpointFile).readlines()
     except IOError:
-        print "Error while open/reading checkpoint file."
+        print("Error while open/reading checkpoint file.")
         raise
     pssm = None
     if newFormat:
@@ -96,6 +96,4 @@ def _pssmParseNew(checkpoint, transform):
             else:
                 pos[j] = float(line[j])
         pssm.append(pos)
-    return pssm
-
-
+    return numpy.array(pssm)
