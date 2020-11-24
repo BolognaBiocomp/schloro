@@ -1,7 +1,14 @@
+import os
 import sys
 import subprocess
 import logging
 from . import config as cfg
+
+def check_db_index(dbfile):
+  for ext in ['phr', 'pin', 'psq']:
+      if not os.path.isfile(dbfile + ".%s" % ext):
+          return False
+  return True
 
 def runPsiBlast(acc, dbfile, fastaFile, workEnv):
   psiblastStdOut   = workEnv.createFile(acc+".psiblast_stdout.", ".log")
@@ -10,6 +17,9 @@ def runPsiBlast(acc, dbfile, fastaFile, workEnv):
   psiblastOutAln   = workEnv.createFile(acc+".psiblast.", ".aln")
 
   sequence = "".join([x.strip() for x in open(fastaFile).readlines()[1:]])
+  if not check_db_index(dbfile):
+      makeblastdb(dbfile)
+
   try:
       subprocess.check_output(['psiblast', '-query', fastaFile,
                                '-db', dbfile,
