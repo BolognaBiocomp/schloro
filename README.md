@@ -36,8 +36,8 @@ subcommands:
     pssm              PSSM input module (one sequence at a time)
 ```
 The program can be run in two different modes:
-- multi-fasta mode, accepting a FASTA file in input containing one or more sequences. In this mode, SChloro internally computes a sequence profile using PSIBLAST for each sequence in the input file and then predicts sub-chloroplastic localization.
-- pssm mode, accepting a FASTA file containing a single protein sequence and a pre-computed PSSM file obtained by PSI-BLAST (using -out_ascii_pssm option). In this case, the computation of the sequence profile i skipped. The provided PSSM must be generated from the input sequence (an exception is raised otherwise). Only a single protein sequence can be processed in this mode.
+- **multi-fasta** mode, accepting a FASTA file in input containing one or more sequences. In this mode, SChloro internally computes a sequence profile using PSIBLAST for each sequence in the input file and then predicts sub-chloroplastic localization.
+- **pssm** mode, accepting a FASTA file containing a single protein sequence and a pre-computed PSSM file obtained by PSI-BLAST (using -out_ascii_pssm option). In this case, the computation of the sequence profile i skipped. The provided PSSM must be generated from the input sequence (an exception is raised otherwise). Only a single protein sequence can be processed in this mode.
 
 #### Multi-fasta mode  
 The show the SChloro help in multi-fasta mode run:
@@ -81,7 +81,7 @@ Now, we are ready to run SChloro on our input protein. Run:
 $ docker run -v $(pwd):/data/ -v $(pwd):/seqdb/ bolognabiocomp/schloro -f F4IQV7.fasta -o F4IQV7.gff -d uniprot_sprot.fasta
 ```
 
-In the example above, we are mapping the current program working directory ($(pwd)) to two folders inside the contained:
+In the example above, we are mapping the current program working directory ($(pwd)) to two folders inside the container:
 - the /data/ folder, where the container expects the input FASTA file;
 - the /seqdb/ folder, where the container expects the sequence database for profile generation.
 
@@ -106,7 +106,7 @@ sp|F4IQV7|SCY2_ARATH	SChloro	Chloroplast thylakoid membrane	1	575	0.629293	.	.	O
 Columns are as follows:
 - Column 1: the protein ID/accession as reported in the FASTA input file;
 - Column 2: the name of tool performing the annotation (i.e. SChloro)
-- Column 3: the annotated feature along the sequence. Here, the complete input sequence is annotated with the corresponding subcelullar localization.
+- Column 3: the annotated feature along the sequence. Here, the complete input sequence is annotated with the corresponding subcellular localization.
 - Column 4: start position of the feature (always 1);
 - Column 5: end position of the feature (always the sequence length);
 - Column 6: feature annotation score as assigned by SChloro;
@@ -225,8 +225,8 @@ subcommands:
     pssm              PSSM input module (one sequence at a time)
 ```
 The program can be run in two different modes:
-- multi-fasta mode, accepting a FASTA file in input containing one or more sequences. In this mode, SChloro internally computes a sequence profile using PSIBLAST for each sequence in the input file and then predicts sub-chloroplastic localization.
-- pssm mode, accepting a FASTA file containing a single protein sequence and a pre-computed PSSM file obtained by PSI-BLAST (using -out_ascii_pssm option). In this case, the computation of the sequence profile i skipped. The provided PSSM must be generated from the input sequence (an exception is raised otherwise). Only a single protein sequence can be processed in this mode.
+- **multi-fasta** mode, accepting a FASTA file in input containing one or more sequences. In this mode, SChloro internally computes a sequence profile using PSIBLAST for each sequence in the input file and then predicts sub-chloroplastic localization.
+- **pssm** mode, accepting a FASTA file containing a single protein sequence and a pre-computed PSSM file obtained by PSI-BLAST (using -out_ascii_pssm option). In this case, the computation of the sequence profile i skipped. The provided PSSM must be generated from the input sequence (an exception is raised otherwise). Only a single protein sequence can be processed in this mode.
 
 #### Multi-fasta mode  
 The show the SChloro help in multi-fasta mode run:
@@ -272,24 +272,13 @@ $ ./schloro.py -f F4IQV7.fasta -o F4IQV7.gff -d uniprot_sprot.fasta
 
 After running SChloro, a database index is generated (using makeblastdb) for the input database, if not present.
 
-The file F4IQV7.gff now contains the SChloro prediction in GFF3 format:
+The file F4IQV7.gff now contains the SChloro prediction in GFF3 format as detailed above:
 ```
 $ cat F4IQV7.gff
 
 ##gff-version 3
 sp|F4IQV7|SCY2_ARATH	SChloro	Chloroplast thylakoid membrane	1	575	0.629293	.	.	Ontology_term:GO:0009535;evidence=ECO:0000256
-
-
 ```
-Columns are as follows:
-- Column 1: the protein ID/accession as reported in the FASTA input file;
-- Column 2: the name of tool performing the annotation (i.e. SChloro)
-- Column 3: the annotated feature along the sequence. Here, the complete input sequence is annotated with the corresponding subcelullar localization.
-- Column 4: start position of the feature (always 1);
-- Column 5: end position of the feature (always the sequence length);
-- Column 6: feature annotation score as assigned by SChloro;
-- Columns 7,8: always empty, reported for compliance with GFF3 format
-- Column 9: Description field. Gene Ontology Cellular Component terms and evidence codes are reported.
 
 #### PSSM mode
 The show the SChloro help in pssm mode run:
