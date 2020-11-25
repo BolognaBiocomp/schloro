@@ -43,7 +43,7 @@ The program can be run in two different modes:
 The show the SChloro help in multi-fasta mode run:
 
 ```
-docker run bolognabiocomp/schloro multi-fasta -h
+$ docker run bolognabiocomp/schloro multi-fasta -h
 
 usage: schloro.py multi-fasta [-h] -f FASTA -d DBFILE -o OUTF
 
@@ -84,6 +84,7 @@ $ docker run -v $(pwd):/data/ -v $(pwd):/seqdb/ bolognabiocomp/schloro -f F4IQV7
 In the example above, we are mapping the current program working directory ($(pwd)) to two folders inside the contained:
 - the /data/ folder, where the container expects the input FASTA file;
 - the /seqdb/ folder, where the container expects the sequence database for profile generation.
+
 In this particular example, both the input FASTA file (i.e. F4IQV7.fasta) and the sequence database (i.e. uniprot_sprot.fasta) are placed in the same directory, actually the current working directory. In general, this two files can be anywhere in your machine. For instance, suppose the sequence database is stored in /databases/UniProt/uniprot_sprot.fasta, while the input sequence is still in the current directory. In this case, you will run:
 
 ```
@@ -114,7 +115,44 @@ Columns are as follows:
 
 #### PSSM mode
 
+The show the SChloro help in pssm mode run:
 
+```
+$ docker run bolognabiocomp/schloro pssm -h
+
+usage: schloro.py pssm [-h] -f FASTA -p PSIBLAST_PSSM -o OUTF
+
+SChloro: PSSM input module.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FASTA, --fasta FASTA
+                        The input FASTA file name (one sequence)
+  -p PSIBLAST_PSSM, --pssm PSIBLAST_PSSM
+                        The PSIBLAST PSSM file
+  -o OUTF, --outf OUTF  The output GFF3 file
+```
+
+Three arguments are accepted:
+- The full path of the input FASTA file containing protein sequences to be predicted;
+- The output GFF3 file where predictions will be stored;
+- A PSSM file previously generated with PSI-BLAST.
+
+With the protein in the example above (F4IQV7) and the sequence database (uniprot_sprot.fasta), we can create a PSSM file using PSI-BLAST:
+
+```
+$ psiblast -query F4IQV7.fasta -db uniprot_sprot.fasta -out_ascii_pssm F4IQV7.pssm -evalue 0.001 -num_iterations 3
+```
+
+The generated PSSM can be now used as input to Schloro in pssm mode:
+
+```
+$ docker run -v $(pwd):/data/ -f F4IQV7.fasta -p F4IQV7.pssm -o F4IQV7.gff
+```
+
+In pssm mode, since no sequence database is used to generate the profile, we can skip the mounting of the /seqdb/ folder in the container.
+
+The file F4IQV7.gff now contains the SChloro prediction in GFF3 format as detailed above.
 
 ### Install and use SChloro from source
 
@@ -257,6 +295,8 @@ Columns are as follows:
 The show the SChloro help in pssm mode run:
 
 ```
+$ ./schloro.py pssm -h
+
 usage: schloro.py pssm [-h] -f FASTA -p PSIBLAST_PSSM -o OUTF
 
 SChloro: PSSM input module.
@@ -275,8 +315,18 @@ Three arguments are accepted:
 - The output GFF3 file where predictions will be stored;
 - A PSSM file previously generated with PSI-BLAST.
 
+With the protein in the example above (F4IQV7) and the sequence database (uniprot_sprot.fasta), we can create a PSSM file using PSI-BLAST:
 
+```
+$ psiblast -query F4IQV7.fasta -db uniprot_sprot.fasta -out_ascii_pssm F4IQV7.pssm -evalue 0.001 -num_iterations 3
+```
 
+The generated PSSM can be now used as input to Schloro in pssm mode:
 
+```
+$ ./schloro.py -f F4IQV7.fasta -p F4IQV7.pssm -o F4IQV7.gff
+```
+
+The file F4IQV7.gff now contains the SChloro prediction in GFF3 format as detailed above.
 
 Please, reports bugs to: castrense.savojardo2@unibo.it
