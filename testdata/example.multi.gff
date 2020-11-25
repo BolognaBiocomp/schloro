@@ -1,0 +1,3 @@
+##gff-version 3
+sp|F4IQV7|SCY2_ARATH	SChloro	Chloroplast thylakoid membrane	1	575	0.629293	.	.	Ontology_term:GO:0009535;evidence=ECO:0000256
+sp|Q8VWJ1|HPT1_ARATH	SChloro	Chloroplast outer membrane	1	393	0.267626	.	.	Ontology_term:GO:0009707;evidence=ECO:0000256
