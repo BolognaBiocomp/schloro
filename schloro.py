@@ -7,8 +7,12 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(message)s',
                     datefmt="[%a, %d %b %Y %H:%M:%S]")
 from Bio import SeqIO
-
-SCHLORO_ROOT = os.environ.get('SCHLORO_ROOT')
+if 'SCHLORO_ROOT' in os.environ:
+    SCHLORO_ROOT = os.environ.get('SCHLORO_ROOT')
+else:
+    logging.error("SCHLORO_ROOT environment varible is not set")
+    logging.error("Please, set and export SCHLORO_ROOT to point to schloro root folder")
+    sys.exit(1)
 sys.path.append(SCHLORO_ROOT)
 
 from schlorolib import workenv
