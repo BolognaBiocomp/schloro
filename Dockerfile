@@ -32,4 +32,4 @@ RUN conda update -n base conda && \
    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
    && find /opt/conda/ -follow -type f -name '*.js.map' -delete
 
-ENTRYPOINT ["/usr/src/schloro/schloro-docker.py"]
+ENTRYPOINT ["/usr/src/schloro/schloro.py"]

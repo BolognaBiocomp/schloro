@@ -47,7 +47,6 @@ SVMBIN = "svm-predict"
 
 PSIBLAST_ITERATIONS = 3
 PSIBLAST_EVALUE = 0.001
-DOCKER_PSIBLAST_DBDIR = "/seqdb"
 
 locmap = {0: ('Chloroplast inner membrane', 'GO:0009706'),
           1: ('Chloroplast outer membrane', 'GO:0009707'),
