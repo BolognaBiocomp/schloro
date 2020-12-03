@@ -85,7 +85,7 @@ def write_gff_output(acc, sequence, output_file, localizations, probs):
     for c in range(0,6):
         if localizations[c] == 1:
             print(acc, "SChloro", cfg.locmap[c][0], 1, l, probs[c], ".", ".",
-            "Ontology_term:%s;evidence=ECO:0000256" % cfg.locmap[c][1],
+            "Ontology_term=%s;evidence=ECO:0000256" % cfg.locmap[c][1],
             file = output_file, sep = "\t")
 
 def check_sequence_pssm_match(sequence, psiblast_pssm):
