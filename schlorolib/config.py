@@ -48,6 +48,31 @@ SVMBIN = "svm-predict"
 PSIBLAST_ITERATIONS = 3
 PSIBLAST_EVALUE = 0.001
 
+GOINFO        = {"GO:0009706": {"uniprot": {"location": {"value": "Chloroplast inner membrane"}},
+                                "GO": {"type": "GO", "id": "GO:0009706",
+                                       "properties": {"term": "C:chloroplast inner membrane"},
+                                       "evidences": [{"code": "ECO:0000256|SAM:SChloro"}]}},
+                "GO:0009707": {"uniprot": {"location": {"value": "Chloroplast outer membrane"}},
+                               "GO": {"type": "GO", "id": "GO:0009707",
+                                      "properties": {"term": "C:chloroplast outer membrane"},
+                                      "evidences": [{"code": "ECO:0000256|SAM:SChloro"}]}},
+                "GO:0009543": {"uniprot": {"location": {"value": "Chloroplast thylakoid lumen"}},
+                               "GO": {"type": "GO", "id": "GO:0009543",
+                                      "properties": {"term": "C:chloroplast thylakoid lumen"},
+                                      "evidences": [{"code": "ECO:0000256|SAM:SChloro"}]}},
+                "GO:0009570": {"uniprot": {"location": {"value": "Chloroplast stroma"}},
+                               "GO": {"type": "GO", "id": "GO:0009570",
+                                      "properties": {"term": "C:chloroplast stroma"},
+                                      "evidences": [{"code": "ECO:0000256|SAM:SChloro"}]}},
+                "GO:0009535": {"uniprot": {"location": {"value": "Chloroplast thylakoid membrane"}},
+                               "GO": {"type": "GO", "id": "GO:0009535",
+                                      "properties": {"term": "C:chloroplast thylakoid membrane"},
+                                      "evidences": [{"code": "ECO:0000256|SAM:SChloro"}]}},
+                "GO:0010287": {"uniprot": {"location": {"value": "Plastoglobule"}},
+                               "GO": {"type": "GO", "id": "GO:0010287",
+                                      "properties": {"term": "C:plastoglobule"},
+                                      "evidences": [{"code": "ECO:0000256|SAM:SChloro"}]}}}
+
 locmap = {0: ('Chloroplast inner membrane', 'GO:0009706'),
           1: ('Chloroplast outer membrane', 'GO:0009707'),
           2: ('Chloroplast thylakoid lumen', 'GO:0009543'),

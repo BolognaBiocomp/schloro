@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 import logging
+import json
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(message)s',
                     datefmt="[%a, %d %b %Y %H:%M:%S]")
@@ -22,8 +23,10 @@ from schlorolib import utils
 def run_multifasta(ns):
     we = workenv.TemporaryEnv()
     ofs = open(ns.outf, 'w')
-    print("##gff-version 3", file = ofs)
+    if ns.outfmt == "gff3":
+        print("##gff-version 3", file = ofs)
     try:
+        protein_jsons = []
         for record in SeqIO.parse(ns.fasta, 'fasta'):
             acc = record.id
             logging.info("Processing sequence %s" % acc)
@@ -39,8 +42,16 @@ def run_multifasta(ns):
             svm_input_file = utils.svm_encode_protein(pssm_mat, features, we)
             localizations, probs = utils.schloro_localization_predict(svm_input_file, we)
             logging.info("Done, writing results to output file.")
-            utils.write_gff_output(acc, sequence, ofs, localizations, probs)
+            if ns.outfmt == "gff3":
+                utils.write_gff_output(acc, sequence, ofs, localizations, probs)
+            else:
+                acc_json = utils.get_json_output(acc, sequence, localizations, probs)
+                protein_jsons.append(acc_json)
         ofs.close()
+        if ns.outfmt == "json":
+            ofs = open(ns.outf, 'w')
+            json.dump(protein_jsons, ofs, indent=5)
+            ofs.close()
     except:
         logging.exception("Errors occurred:")
         sys.exit(1)
@@ -51,7 +62,8 @@ def run_multifasta(ns):
 def run_pssm(ns):
     we = workenv.TemporaryEnv()
     ofs = open(ns.outf, 'w')
-    print("##gff-version 3", file = ofs)
+    if ns.outfmt == "gff3":
+        print("##gff-version 3", file = ofs)
     try:
         record = SeqIO.read(ns.fasta, "fasta")
     except:
@@ -79,7 +91,11 @@ def run_pssm(ns):
                 svm_input_file = utils.svm_encode_protein(pssm_mat, features, we)
                 localizations, probs = utils.schloro_localization_predict(svm_input_file, we)
                 logging.info("Done, writing results to output file.")
-                utils.write_gff_output(acc, sequence, ofs, localizations, probs)
+                if ns.outfmt == "gff3":
+                    utils.write_gff_output(acc, sequence, ofs, localizations, probs)
+                else:
+                    acc_json = utils.get_json_output(acc, sequence, localizations, probs)
+                    json.dump([acc_json], ofs, indent=5)
                 ofs.close()
             except:
                 logging.exception("Errors occurred:")
@@ -111,6 +127,9 @@ def main():
     multifasta.add_argument("-o", "--outf",
                         help = "The output GFF3 file",
                         dest = "outf", required = True)
+    multifasta.add_argument("-m", "--outfmt",
+                          help = "The output format: json or gff3 (default)",
+                          choices=['json', 'gff3'], required = False, default = "gff3")
     multifasta.set_defaults(func=run_multifasta)
 
     pssm.add_argument("-f", "--fasta",
@@ -122,6 +141,9 @@ def main():
     pssm.add_argument("-o", "--outf",
                         help = "The output GFF3 file",
                         dest = "outf", required = True)
+    pssm.add_argument("-m", "--outfmt",
+                      help = "The output format: json or gff3 (default)",
+                      choices=['json', 'gff3'], required = False, default = "gff3")
     pssm.set_defaults(func=run_pssm)
     if len(sys.argv) == 1:
         parser.print_help()

@@ -88,6 +88,58 @@ def write_gff_output(acc, sequence, output_file, localizations, probs):
             "Ontology_term=%s;evidence=ECO:0000256" % cfg.locmap[c][1],
             file = output_file, sep = "\t")
 
+def get_json_output(acc, sequence, localizations, probs):
+    acc_json = {'accession': acc, 'dbReferences': [], 'comments': []}
+    acc_json['sequence'] = {
+                              "length": len(sequence),
+                              "sequence": sequence
+                           }
+    for c in range(0,6):
+        if localizations[c] == 1:
+            loc = cfg.locmap[c]
+            go_info = cfg.GOINFO[loc[1]]
+            acc_json['dbReferences'].append({
+                "id": loc[1],
+                "type": "GO",
+                "properties": {
+                  "term": go_info['GO']['properties']['term'],
+                  "source": "IEA:SChloro",
+                  "score": round(float(probs[c]),2)
+                },
+                "evidences": [
+                  {
+                    "code": "ECO:0000256",
+                    "source": {
+                      "name": "SAM",
+                      "id": "SChloro",
+                      "url": "https://schloro.biocomp.unibo.it",
+                    }
+                  }
+                ]
+            })
+            acc_json['comments'].append({
+                "type": "SUBCELLULAR_LOCATION",
+                "locations": [
+                  {
+                    "location": {
+                      "value": go_info["uniprot"]["location"]["value"],
+                      "score": round(float(probs[c]),2),
+                      "evidences": [
+                        {
+                          "code": "ECO:0000256",
+                          "source": {
+                            "name": "SAM",
+                            "id": "SChloro",
+                            "url": "https://schloro.biocomp.unibo.it",
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+            })
+    return acc_json
+
 def check_sequence_pssm_match(sequence, psiblast_pssm):
     try:
         pssm_mat = pbp.BlastCheckPointPSSM(psiblast_pssm)
