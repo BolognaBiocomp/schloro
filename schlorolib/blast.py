@@ -34,7 +34,8 @@ def runPsiBlast(acc, dbfile, fastaFile, workEnv, data_cache=None):
                          '-evalue', str(cfg.PSIBLAST_EVALUE)],
                          stdout=open(psiblastStdOut, 'w'),
                          stderr=open(psiblastStdErr, 'w'))
-        data_cache.store(psiblastOutPssm, sequence, 'psiblast.pssm')
+        if data_cache is not None:
+          data_cache.store(psiblastOutPssm, sequence, 'psiblast.pssm')
     except:
         logging.error("PSIBLAST failed. For details, please see stderr file %s" % psiblastStdErr)
         raise
