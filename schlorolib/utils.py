@@ -5,6 +5,15 @@ import logging
 from . import config as cfg
 from . import cpparser as pbp
 
+def get_data_cache(cache_dir):
+    import os
+    from . import datacache
+    ret = None
+    if cache_dir is not None:
+        if os.path.isdir(cache_dir):
+            ret = datacache.DataCache(cache_dir)
+    return ret
+
 def seq_to_hydro(sequence):
     v = []
     for aa in sequence:

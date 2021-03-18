@@ -26,6 +26,7 @@ def run_multifasta(ns):
     if ns.outfmt == "gff3":
         print("##gff-version 3", file = ofs)
     try:
+        data_cache = utils.get_data_cache(ns.cache_dir)
         protein_jsons = []
         for record in SeqIO.parse(ns.fasta, 'fasta'):
             acc = record.id
@@ -34,7 +35,7 @@ def run_multifasta(ns):
             fasta_file = we.createFile("seq.", ".fasta")
             SeqIO.write([record], fasta_file, 'fasta')
             logging.info("Running PSIBLAST")
-            psiblast_pssm, _ = blast.runPsiBlast("aseq", ns.dbfile, fasta_file, we)
+            psiblast_pssm = blast.runPsiBlast("aseq", ns.dbfile, fasta_file, we, data_cache=data_cache)
             logging.info("Predicting topological features")
             elm_input_file, pssm_mat = utils.elm_encode_protein(sequence, psiblast_pssm, we)
             features = utils.schloro_feature_predict(elm_input_file, we)
@@ -130,6 +131,7 @@ def main():
     multifasta.add_argument("-m", "--outfmt",
                           help = "The output format: json or gff3 (default)",
                           choices=['json', 'gff3'], required = False, default = "gff3")
+    multifasta.add_argument("-c", "--cache-dir", help="Cache dir for alignemnts", dest="cache_dir", required=False, default=None)
     multifasta.set_defaults(func=run_multifasta)
 
     pssm.add_argument("-f", "--fasta",
