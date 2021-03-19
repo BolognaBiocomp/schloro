@@ -19,6 +19,7 @@ sys.path.append(SCHLORO_ROOT)
 from schlorolib import workenv
 from schlorolib import blast
 from schlorolib import utils
+from schlorolib import config
 
 def run_multifasta(ns):
     we = workenv.TemporaryEnv()
@@ -35,7 +36,7 @@ def run_multifasta(ns):
             fasta_file = we.createFile("seq.", ".fasta")
             SeqIO.write([record], fasta_file, 'fasta')
             logging.info("Running PSIBLAST")
-            psiblast_pssm = blast.runPsiBlast("aseq", ns.dbfile, fasta_file, we, data_cache=data_cache)
+            psiblast_pssm = blast.runPsiBlast("aseq", config.BLASTDB, fasta_file, we, data_cache=data_cache)
             logging.info("Predicting topological features")
             elm_input_file, pssm_mat = utils.elm_encode_protein(sequence, psiblast_pssm, we)
             features = utils.schloro_feature_predict(elm_input_file, we)
@@ -122,9 +123,6 @@ def main():
     multifasta.add_argument("-f", "--fasta",
                             help = "The input multi-FASTA file name",
                             dest = "fasta", required = True)
-    multifasta.add_argument("-d", "--dbfile",
-                            help = "The PSIBLAST DB file",
-                            dest = "dbfile", required= True)
     multifasta.add_argument("-o", "--outf",
                         help = "The output GFF3 file",
                         dest = "outf", required = True)

@@ -19,10 +19,6 @@ WORKDIR /usr/src/schloro
 
 COPY . .
 
-WORKDIR /seqdb/
-
-WORKDIR /data/
-
 RUN conda update -n base conda && \
    conda install --yes nomkl blast -c bioconda && \
    conda install --yes nomkl libsvm -c conda-forge && \
@@ -31,5 +27,16 @@ RUN conda update -n base conda && \
    && find /opt/conda/ -follow -type f -name '*.a' -delete \
    && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
    && find /opt/conda/ -follow -type f -name '*.js.map' -delete
+
+WORKDIR /seqdb/
+
+RUN apt-get update -y && \
+    apt-get install -y wget
+
+RUN wget https://share.biocomp.unibo.it/biocomp/sp2021_01/uniprot_sprot.fasta.gz && \
+    gunzip uniprot_sprot.fasta.gz && \
+    makeblastdb -in uniprot_sprot.fasta -dbtype prot
+
+WORKDIR /data/
 
 ENTRYPOINT ["/usr/src/schloro/schloro.py"]

@@ -2,6 +2,7 @@ import os
 
 SCHLORO_ROOT = os.environ.get('SCHLORO_ROOT')
 
+BLASTDB="/seqdb/uniprot_sprot.fasta"
 
 KD = {'A': 0.7,
       'C': 0.7777777777777778,
