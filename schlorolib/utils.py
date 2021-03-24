@@ -98,6 +98,11 @@ def write_gff_output(acc, sequence, output_file, localizations, probs):
             file = output_file, sep = "\t")
 
 def get_json_output(i_json, localizations, probs):
+    if "dbReferences" not in i_json:
+        i_json["dbReferences"] = []
+    if "comments" not in i_json:
+        i_json["comments"] = []
+
     for c in range(0,6):
         if localizations[c] == 1:
             loc = cfg.locmap[c]
@@ -121,27 +126,47 @@ def get_json_output(i_json, localizations, probs):
                   }
                 ]
             })
-            i_json['comments'].append({
-                "type": "SUBCELLULAR_LOCATION",
-                "locations": [
-                  {
-                    "location": {
-                      "value": go_info["uniprot"]["location"]["value"],
-                      "score": round(float(probs[c]),2),
-                      "evidences": [
-                        {
-                          "code": "ECO:0000256",
-                          "source": {
-                            "name": "SAM",
-                            "id": "SChloro",
-                            "url": "https://schloro.biocomp.unibo.it",
-                          }
+            if len(i_json['comments']) == 0:
+                i_json['comments'].append({
+                    "type": "SUBCELLULAR_LOCATION",
+                    "locations": [
+                      {
+                        "location": {
+                          "value": go_info["uniprot"]["location"]["value"],
+                          "score": round(float(probs[c]),2),
+                          "evidences": [
+                            {
+                              "code": "ECO:0000256",
+                              "source": {
+                                "name": "SAM",
+                                "id": "SChloro",
+                                "url": "https://schloro.biocomp.unibo.it",
+                              }
+                            }
+                          ]
                         }
-                      ]
-                    }
+                      }
+                    ]
+                })
+            else:
+                sl = [c for s in i_json['comments'] if c['type'] == "SUBCELLULAR_LOCATION"][0]
+                sl['locations'].append({
+                  "location": {
+                    "value": go_info["uniprot"]["location"]["value"],
+                    "score": round(float(probs[c]),2),
+                    "evidences": [
+                      {
+                        "code": "ECO:0000256",
+                        "source": {
+                          "name": "SAM",
+                          "id": "SChloro",
+                          "url": "https://schloro.biocomp.unibo.it",
+                        }
+                      }
+                    ]
                   }
-                ]
-            })
+                })
+                i_json['comments'] = [sl]
     return i_json
 
 def check_sequence_pssm_match(sequence, psiblast_pssm):
