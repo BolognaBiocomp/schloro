@@ -97,17 +97,12 @@ def write_gff_output(acc, sequence, output_file, localizations, probs):
             "Ontology_term=%s;evidence=ECO:0000256" % cfg.locmap[c][1],
             file = output_file, sep = "\t")
 
-def get_json_output(acc, sequence, localizations, probs):
-    acc_json = {'accession': acc, 'dbReferences': [], 'comments': []}
-    acc_json['sequence'] = {
-                              "length": len(sequence),
-                              "sequence": sequence
-                           }
+def get_json_output(i_json, localizations, probs):
     for c in range(0,6):
         if localizations[c] == 1:
             loc = cfg.locmap[c]
             go_info = cfg.GOINFO[loc[1]]
-            acc_json['dbReferences'].append({
+            i_json['dbReferences'].append({
                 "id": loc[1],
                 "type": "GO",
                 "properties": {
@@ -126,7 +121,7 @@ def get_json_output(acc, sequence, localizations, probs):
                   }
                 ]
             })
-            acc_json['comments'].append({
+            i_json['comments'].append({
                 "type": "SUBCELLULAR_LOCATION",
                 "locations": [
                   {
@@ -147,7 +142,7 @@ def get_json_output(acc, sequence, localizations, probs):
                   }
                 ]
             })
-    return acc_json
+    return i_json
 
 def check_sequence_pssm_match(sequence, psiblast_pssm):
     try:
