@@ -36,7 +36,7 @@ def run_multifasta(ns):
             SeqIO.write([record], fasta_file, 'fasta')
             logging.info("Running PSIBLAST")
             psiblast_pssm = blast.runPsiBlast("aseq", ns.dbfile, fasta_file, we, data_cache=data_cache,
-                                              num_alignments=ns.pdnalign, num_iterations=ns.pbniter, evalue=ns.pbeval)
+                                              num_alignments=ns.pbnalign, num_iterations=ns.pbniter, evalue=ns.pbeval)
             logging.info("Predicting topological features")
             elm_input_file, pssm_mat = utils.elm_encode_protein(sequence, psiblast_pssm, we)
             features = utils.schloro_feature_predict(elm_input_file, we)
