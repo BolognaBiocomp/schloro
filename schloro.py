@@ -21,7 +21,6 @@ from schlorolib import blast
 from schlorolib import utils
 
 def run_multifasta(ns):
-    we = workenv.TemporaryEnv()
     ofs = open(ns.outf, 'w')
     if ns.outfmt == "gff3":
         print("##gff-version 3", file = ofs)
@@ -29,6 +28,7 @@ def run_multifasta(ns):
         data_cache = utils.get_data_cache(ns.cache_dir)
         protein_jsons = []
         for record in SeqIO.parse(ns.fasta, 'fasta'):
+            we = workenv.TemporaryEnv()
             acc = record.id
             logging.info("Processing sequence %s" % acc)
             sequence = str(record.seq)
@@ -49,6 +49,7 @@ def run_multifasta(ns):
             else:
                 acc_json = utils.get_json_output(acc, sequence, localizations, probs)
                 protein_jsons.append(acc_json)
+            we.destroy()
         ofs.close()
         if ns.outfmt == "json":
             ofs = open(ns.outf, 'w')
@@ -58,7 +59,6 @@ def run_multifasta(ns):
         logging.exception("Errors occurred:")
         sys.exit(1)
     else:
-        we.destroy()
         sys.exit(0)
 
 def run_pssm(ns):
