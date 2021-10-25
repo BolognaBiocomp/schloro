@@ -20,10 +20,23 @@ def seq_to_hydro(sequence):
         v.append(cfg.KD.get(aa, 0.0))
     return np.array(v).reshape((len(sequence),1))
 
+def one_hot_encoding(sequence, alph="ARNDCQEGHILKMFPSTWYV"):
+    profile = np.zeros((len(sequence), 20))
+    for (i, aa) in enumerate(sequence):
+        try:
+            j = alph.index(aa)
+            profile[i,j] = 1.0
+        except:
+            pass
+    return profile
+
 def elm_encode_protein(sequence, psiblast_pssm, we):
     output_dat = we.createFile("elm.input.",".dat")
     hydrophobicity = seq_to_hydro(sequence)
-    pssm_mat = pbp.BlastCheckPointPSSM(psiblast_pssm)
+    try:
+        pssm_mat = pbp.BlastCheckPointPSSM(psiblast_pssm)
+    except:
+        pssm_mat = one_hot_encoding(sequence)
     mat = np.concatenate((pssm_mat,hydrophobicity),axis=1)
     np.savetxt(output_dat, mat)
     return output_dat, pssm_mat
